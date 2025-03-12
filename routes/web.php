@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\WelcomeController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,10 +18,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [WelcomeController::class, 'index']);
+
+Route::resource('level', LevelController::class);
+Route::prefix('level')->controller(LevelController::class)->group(function () {
+    Route::post('list', 'list')->name('level.list');
 });
 
-Route::get('/level', [LevelController::class, 'index']);
-Route::get('/kategori', [KategoriController::class, 'index']);
-Route::get('/user', [UserController::class, 'index']);
+Route::resource('user', UsersController::class);
+Route::prefix('user')->controller(UsersController::class)->group(function () {
+    Route::post('list', 'list')->name('user.list');
+});
+
+Route::resource('kategori', KategoriController::class);
+Route::prefix('kategori')->controller(KategoriController::class)->group(function () {
+    Route::post('list', 'list')->name('kategori.list');
+});
